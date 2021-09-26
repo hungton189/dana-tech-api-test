@@ -33,6 +33,7 @@
     "exceljs": "^3.5.0",
     "firebase": "^7.5.0",
     "glob": "^7.1.5",
+    "good": "^8.1.2",
     "hapi-auth-jwt2": "^8.8.0",
     "hapi-swagger": "^10.2.0",
     "knex": "^0.19.5",
@@ -45,5 +46,9 @@
     "pc-vn": "^1.0.1",
     "pg": "^7.12.1",
     "slug": "^1.1.0"
+  },
+  "devDependencies": {
+    "good-console": "^8.0.0",
+    "good-squeeze": "^5.1.0"
   }
 }

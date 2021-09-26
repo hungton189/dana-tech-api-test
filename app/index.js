@@ -8,7 +8,6 @@ const hapiAuthJWT = require("hapi-auth-jwt2");
 const routes = require("./main/routes");
 const config = require("./config");
 require("dotenv").config();
-const morgan = require("morgan");
 
 const server = new Hapi.Server({
   host: config.api.host,
@@ -70,6 +69,22 @@ async function start() {
     plugins.push({
       plugin: HapiSwagger,
       options: swaggerOptions,
+    });
+    plugins.push({
+      plugin: require("good"),
+      options: {
+        reporters: {
+          console: [
+            {
+              module: "good-squeeze",
+              name: "Squeeze",
+              args: [{ response: "*", log: "*" }],
+            },
+            { module: "good-console" },
+            "stdout",
+          ],
+        },
+      },
     });
     await server.register(plugins);
     server.auth.strategy("jwt", "jwt", {
