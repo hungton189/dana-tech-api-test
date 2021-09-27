@@ -13,6 +13,7 @@ class AuthController {
       const { payload } = request;
       return await this.service.login(payload);
     } catch (err) {
+      console.log(err);
       throw err;
     }
   }

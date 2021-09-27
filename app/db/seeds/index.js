@@ -353,39 +353,40 @@ const dataProduct = [
 ];
 
 exports.seed = async function (knex, prom) {
+  console.log("seed");
   const users = await Models.User.query();
-  if(users.length === 0) {
-  await Models.Role.query().delete();
-  await Models.User.query().delete();
-  await Models.Category.query().delete();
-  await Models.Producer.query().delete();
-  await Models.Product.query().delete();
+  if (users.length === 0) {
+    await Models.Role.query().delete();
+    await Models.User.query().delete();
+    await Models.Category.query().delete();
+    await Models.Producer.query().delete();
+    await Models.Product.query().delete();
 
-  const roles = await Models.Role.query().insert(dataRole).returning("*");
-  const newUsers = dataUser.map((e) => {
-    e.roleId = roles.find((i) => i.nameRole === e.name).id;
-    e.password = PasswordUtils.hashSync("123456");
-    return e;
-  });
-  await Models.User.query().insert(newUsers);
+    const roles = await Models.Role.query().insert(dataRole).returning("*");
+    const newUsers = dataUser.map((e) => {
+      e.roleId = roles.find((i) => i.nameRole === e.name).id;
+      e.password = PasswordUtils.hashSync("123456");
+      return e;
+    });
+    await Models.User.query().insert(newUsers);
 
-  const categories = await Models.Category.query()
-    .insert(dataCategory)
-    .returning("*");
-  const newProducers = dataProducer.map((e) => {
-    e.categoryId = categories.find((i) => i.nameCategory === e.categoryId).id;
-    return e;
-  });
-  const producers = await Models.Producer.query()
-    .insert(newProducers)
-    .returning("*");
+    const categories = await Models.Category.query()
+      .insert(dataCategory)
+      .returning("*");
+    const newProducers = dataProducer.map((e) => {
+      e.categoryId = categories.find((i) => i.nameCategory === e.categoryId).id;
+      return e;
+    });
+    const producers = await Models.Producer.query()
+      .insert(newProducers)
+      .returning("*");
 
-  const newProducts = dataProduct.map((e) => {
-    e.categoryId = categories.find((i) => i.nameCategory === e.categoryId).id;
-    e.producerId = producers.find((i) => i.name === e.producerId).id;
-    return e;
-  });
-  await Models.Product.query().insert(newProducts);    
-}
-return 1;
+    const newProducts = dataProduct.map((e) => {
+      e.categoryId = categories.find((i) => i.nameCategory === e.categoryId).id;
+      e.producerId = producers.find((i) => i.name === e.producerId).id;
+      return e;
+    });
+    await Models.Product.query().insert(newProducts);
+  }
+  return 1;
 };
